@@ -1,0 +1,17 @@
+export const companyOptions = [
+  { label: "ADBL (Agricultural Development Bank Limited)", value: "ADBL" },
+  { label: "CBL (Civil Bank Limited)", value: "CBL" },
+  { label: "CZBIL (Citizen Bank International Limited)", value: "CZBIL" },
+  { label: "EBL (Everest Bank Limit)", value: "EBL" },
+  { label: "GBIME (Global IME Bank Limited)", value: "GBIME" },
+  { label: "KBL (Kumari Bank Limited)", value: "KBL" },
+  { label: "LBL (Laxmi Bank Limited)", value: "LBL" },
+  { label: "NABIL (Nabil Bank Limited)", value: "NABIL" },
+  { label: "NBL (Nepal Bank Limited)", value: "NBL" },
+  { label: "NICA (NIC Asia Bank Limited)", value: "NICA" },
+  { label: "NMB (NMB bank Limited)", value: "NMB" },
+  { label: "PCBL (Prime Commercial Bank Limited", value: "PCBL" },
+  { label: "PRVU (Prabhu Bank Limited)", value: "PRVU" },
+  { label: "SBI (Nepal SBI Bank Limited)", value: "SBI" },
+  { label: "SCB (Standard Chartered Bank Limited)", value: "SCB" },
+];

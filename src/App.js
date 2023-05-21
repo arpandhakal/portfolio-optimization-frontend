@@ -49,6 +49,14 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="/history"
+              element={
+                <PrivateRoute>
+                  <Dashboard />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
