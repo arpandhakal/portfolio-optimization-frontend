@@ -31,15 +31,43 @@ const Dashboard = ({ auth, logoutUser }) => {
   const [weights, setWeights] = useState();
   const [optimizationFlag, setOptimizationFlag] = useState(null);
   const [optimizedWeights, setOptimizedWeights] = useState();
-  console.log(formDataFinal);
+  const [totalReturns, setTotalReturns] = useState();
+  const [initialPortfolio, setInitialPortfolio] = useState([]);
+  const [finalPortfolio, setFinalPortfolio] = useState([]);
+  const [totalReturnsLoading, setTotalReturnsLoading] = useState(true);
+  console.log(finalPortfolio);
   const handleOpenModal = () => {
     setModalOpen(true);
+  };
+
+  useEffect(() => {
+    if (optimizedWeights && optimizedWeights !== []) {
+      setFinalPortfolio(
+        Object.entries(optimizedWeights).map(([symbol, amount]) => ({
+          symbol,
+          amount,
+        }))
+      );
+    }
+  }, [optimizedWeights]);
+
+  const savePortfolio = async () => {
+    try {
+      const payload = {
+        userId: auth.user.email,
+        initialPortfolio: formDataFinal,
+        finalPortfolio: finalPortfolio,
+      };
+      const response = await axios
+        .post("http://localhost:8000/api/save", payload)
+        .then(() => alert("Portfolio Succesfully Saved"))
+        .catch((err) => console.log(err));
+    } catch (error) {}
   };
 
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-  console.log(weights);
 
   const handleOptimization = async () => {
     const symbols = formDataFinal?.map((item, index) => item.symbol);
@@ -54,7 +82,6 @@ const Dashboard = ({ auth, logoutUser }) => {
         const predictions = {};
 
         for (const stockName in data) {
-          console.log(111, stockName);
           const stockValues = data[stockName];
           const lastValue = stockValues[stockValues.length - 1];
           predictions[stockName] = lastValue;
@@ -82,8 +109,16 @@ const Dashboard = ({ auth, logoutUser }) => {
             }
           );
           // Handle the optResponse here
-          console.log(optResponse);
-          setOptimizedWeights(optResponse.data);
+          setOptimizedWeights(optResponse.data.filtered_weights);
+          setTotalReturns(
+            Object.keys(optResponse.data.total_return).map((symbol, index) => {
+              const amount = parseFloat(
+                optResponse.data.total_return[symbol].toFixed(3)
+              );
+              return { sn: index + 1, symbol, amount };
+            })
+          );
+          setTotalReturnsLoading(false);
           setOptimizationFlag(false);
         } catch (err) {
           console.log(err);
@@ -94,7 +129,7 @@ const Dashboard = ({ auth, logoutUser }) => {
       optimizePortfolio();
     }
   }, [predictions]);
-  console.log(optimizedWeights);
+  console.log(totalReturns);
 
   useEffect(() => {
     // Calculate the total amount
@@ -126,11 +161,17 @@ const Dashboard = ({ auth, logoutUser }) => {
       setTableLoading(true);
     }
   }, [formDataFinal]);
+
   const classes = useStyles();
   const tableColumns = [
     { title: "Index", field: "index" },
     { title: "Symbol", field: "symbol" },
     { title: "Investment Amount", field: "amount", type: "amount" },
+  ];
+  const bcolumns = [
+    { title: "Index", field: "sn" },
+    { title: "Symbol", field: "symbol" },
+    { title: "Benchmark Total Return (%)", field: "amount", type: "amount" },
   ];
 
   return (
@@ -153,7 +194,12 @@ const Dashboard = ({ auth, logoutUser }) => {
             <CustomButton children={"Clear Portfolio"} />
           </Grid>
           <Grid item xs={2} md={2}>
-            <CustomButton children={"Save Portfolio"} color={"primary"} />
+            <CustomButton
+              children={"Save Portfolio"}
+              color={"primary"}
+              onClick={savePortfolio}
+              isDisabled={finalPortfolio.length !== 0 ? false : true}
+            />
           </Grid>
         </Grid>
         <Divider />
@@ -279,7 +325,12 @@ const Dashboard = ({ auth, logoutUser }) => {
                     </Grid>
                   </Grid>
                   <Divider style={{ borderWidth: 4 }} />
-                  Coming Soon....
+                  <DynamicDataTableServerPaginate
+                    loading={totalReturnsLoading}
+                    column={bcolumns}
+                    data={totalReturns}
+                    paginationDisplay={false}
+                  />
                 </Grid>
               </Card>
             </Grid>

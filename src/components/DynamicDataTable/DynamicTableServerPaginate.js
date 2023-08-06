@@ -172,7 +172,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "10pt",
   },
   styleCell: {
-    backgroundColor: "rgba(15, 142, 62, 0.1) !important",
+    backgroundColor: "rgba(63,81,181, 0.4) !important",
   },
   normal: {
     backgroundColor: "#F5FAF5",

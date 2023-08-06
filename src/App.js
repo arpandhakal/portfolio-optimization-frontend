@@ -12,6 +12,7 @@ import jwtDecode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { logoutUser, setCurrentUser } from "./action/authActions";
 import PrivateRoute from "./routes/PrivateRoute";
+import History from "./pages/History";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -53,7 +54,7 @@ function App() {
               path="/history"
               element={
                 <PrivateRoute>
-                  <Dashboard />
+                  <History />
                 </PrivateRoute>
               }
             />

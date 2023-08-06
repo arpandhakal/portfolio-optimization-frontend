@@ -314,7 +314,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 20,
     margin: 20,
     minHeight: "20vh",
-    width: "100%",
+    width: "80%",
   },
   reportPaperSecondary: {
     padding: 20,

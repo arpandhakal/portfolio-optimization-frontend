@@ -23,7 +23,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomButton = ({ variant, color, onClick, children }) => {
+const CustomButton = ({
+  variant,
+  color,
+  onClick,
+  children,
+  isDisabled = false,
+}) => {
   const classes = useStyles();
 
   return (
@@ -31,6 +37,7 @@ const CustomButton = ({ variant, color, onClick, children }) => {
       variant={variant}
       color={color}
       onClick={onClick}
+      disabled={isDisabled}
       className={`${classes.button} ${
         color === "primary" ? classes.primaryButton : classes.secondaryButton
       }`}
